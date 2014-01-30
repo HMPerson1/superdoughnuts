@@ -3,14 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package hmperson1.apps.superdoughnuts.gui;
 
 /**
+ * Panel that contains the actual game.
  *
  * @author HMPerson1
  */
-public class GamePanel extends javax.swing.JPanel {
+class GamePanel extends javax.swing.JPanel {
 
     /**
      * Creates new form GamePanel

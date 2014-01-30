@@ -6,13 +6,22 @@
 
 package hmperson1.apps.superdoughnuts
 
-import hmperson1.apps.superdoughnuts.gui.StartPanel
+import hmperson1.apps.superdoughnuts.gui.GuiManager
 
 object SuperDoughnuts {
   /**
    * @param args the command line arguments
    */
   def main(args: Array[String]): Unit = {
-    StartPanel.start((panel: StartPanel) => { println("You pressed the start button! Good Job!") }, () => { System.exit(0) })
+    GuiManager.doOnEdt(() => {
+      GuiManager renameFrame "Doughnuts"
+      GuiManager showPanel GuiManager.createStartPanel(
+        (map: Map[String, String]) => {
+          println("You pressed the start button! Good Job!")
+          println("PlayerName: " + map("playerName"))
+          println("Difficulty: " + map("difficulty"))
+        },
+        () => { System.exit(0) })
+    })
   }
 }

@@ -5,22 +5,20 @@
  */
 package hmperson1.apps.superdoughnuts.gui;
 
-import java.lang.reflect.InvocationTargetException;
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 import scala.Unit;
 import scala.Function0;
 import scala.Function1;
+import scala.collection.immutable.HashMap;
+import scala.collection.immutable.Map;
 
 /**
+ * Panel shown at the start.
  *
  * @author HMPerson1
  */
-public class StartPanel extends javax.swing.JPanel {
+class StartPanel extends javax.swing.JPanel {
 
-    private final Function1<StartPanel, Unit> startCallback;
+    private final Function1<Map<String, String>, Unit> startCallback;
     private final Function0<Unit> exitCallback;
 
     /**
@@ -29,31 +27,10 @@ public class StartPanel extends javax.swing.JPanel {
      * @param startCallback Called when start is pressed
      * @param exitCallback Called when exit is pressed
      */
-    public StartPanel(Function1<StartPanel, Unit> startCallback, Function0<Unit> exitCallback) {
+    public StartPanel(Function1<Map<String, String>, Unit> startCallback, Function0<Unit> exitCallback) {
         initComponents();
         this.startCallback = startCallback;
         this.exitCallback = exitCallback;
-    }
-
-    public static void start(final Function1<StartPanel, Unit> startCallback, final Function0<Unit> exitCallback) throws InterruptedException, InvocationTargetException {
-        SwingUtilities.invokeAndWait(new Runnable() {
-            public void run() {
-                try {
-                    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-                    // If it failed, oh well
-                } catch (ClassNotFoundException ex) {
-                } catch (InstantiationException ex) {
-                } catch (IllegalAccessException ex) {
-                } catch (UnsupportedLookAndFeelException ex) {
-                }
-                StartPanel panel = new StartPanel(startCallback, exitCallback);
-                JFrame frame = new JFrame();
-                frame.add(panel);
-                frame.pack();
-                frame.setVisible(true);
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            }
-        });
     }
 
     /**
@@ -129,7 +106,7 @@ public class StartPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(difficultyComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(startButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(exitButton)
@@ -143,20 +120,15 @@ public class StartPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void startButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startButtonActionPerformed
-        startCallback.apply(this);
+        startCallback.apply(
+                new HashMap<String, String>()
+                .<String>updated("playerName", nameTextField.getText())
+                .<String>updated("difficulty", Integer.toString(difficultyComboBox.getSelectedIndex())));
     }//GEN-LAST:event_startButtonActionPerformed
 
     private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
         exitCallback.apply();
     }//GEN-LAST:event_exitButtonActionPerformed
-
-    public String getPlayerName() {
-        return nameTextField.getText();
-    }
-
-    public int getDifficulty() {
-        return difficultyComboBox.getSelectedIndex();
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private final javax.swing.JComboBox difficultyComboBox = new javax.swing.JComboBox();
