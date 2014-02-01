@@ -18,14 +18,21 @@ import scala.collection.immutable.Map;
  */
 class StartPanel extends javax.swing.JPanel {
 
+    /**
+     * Called when start is pressed.
+     */
     private final Function1<Map<String, String>, Unit> startCallback;
+
+    /**
+     * Called when exit is pressed.
+     */
     private final Function0<Unit> exitCallback;
 
     /**
-     * Creates new form StartPanel
+     * Creates and populates a new {@link StartPanel}.
      *
-     * @param startCallback Called when start is pressed
-     * @param exitCallback Called when exit is pressed
+     * @param startCallback called when start is pressed
+     * @param exitCallback called when exit is pressed
      */
     public StartPanel(Function1<Map<String, String>, Unit> startCallback, Function0<Unit> exitCallback) {
         initComponents();
