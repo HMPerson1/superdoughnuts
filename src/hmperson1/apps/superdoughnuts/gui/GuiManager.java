@@ -85,8 +85,9 @@ public class GuiManager {
      */
     public static void showPanel(JPanel panel) {
         mainFrame.setContentPane(panel);
+        mainFrame.setMinimumSize(null);
         mainFrame.pack();
-        mainFrame.setMinimumSize(panel.getPreferredSize());
+        mainFrame.setMinimumSize(mainFrame.getSize());
         mainFrame.setVisible(true);
     }
 
