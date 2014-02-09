@@ -5,6 +5,7 @@
  */
 package hmperson1.apps.superdoughnuts.gui;
 
+import hmperson1.apps.superdoughnuts.SuperDoughnuts;
 import scala.Unit;
 import scala.Function0;
 import scala.Function1;
@@ -129,8 +130,8 @@ class StartPanel extends javax.swing.JPanel {
     private void startButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startButtonActionPerformed
         startCallback.apply(
                 new HashMap<String, String>()
-                .<String>updated("playerName", nameTextField.getText())
-                .<String>updated("difficulty", Integer.toString(difficultyComboBox.getSelectedIndex())));
+                .<String>updated(SuperDoughnuts.KEY_PLAYERNAME(), nameTextField.getText())
+                .<String>updated(SuperDoughnuts.KEY_DIFFICLUTY(), Integer.toString(difficultyComboBox.getSelectedIndex())));
     }//GEN-LAST:event_startButtonActionPerformed
 
     private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
