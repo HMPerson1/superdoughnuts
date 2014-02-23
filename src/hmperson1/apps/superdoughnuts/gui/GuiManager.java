@@ -82,10 +82,11 @@ public class GuiManager {
     /**
      * Creates a {@link GamePanel}.
      *
-     * @return a new GamePanel
+     * @param backCallback called when back is pressed
+     * @return a new GamePanel with the given functions
      */
-    public static JPanel createGamePanel() {
-        return new GamePanel();
+    public static JPanel createGamePanel(Function0<Unit> backCallback) {
+        return new GamePanel(backCallback);
     }
 
     /**

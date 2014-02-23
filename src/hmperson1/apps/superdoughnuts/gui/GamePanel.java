@@ -16,6 +16,14 @@
  */
 package hmperson1.apps.superdoughnuts.gui;
 
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Insets;
+import javax.swing.JPanel;
+import javax.swing.Painter;
+import scala.Function0;
+import scala.Unit;
+
 /**
  * Panel that contains the actual game.
  *
@@ -24,10 +32,18 @@ package hmperson1.apps.superdoughnuts.gui;
 class GamePanel extends javax.swing.JPanel {
 
     /**
-     * Creates new form GamePanel
+     * Called when exit is pressed
      */
-    public GamePanel() {
+    private final Function0<Unit> backCallback;
+
+    /**
+     * Creates and populates a new {@link GamePanel}.
+     *
+     * @param backCallback called when back is pressed
+     */
+    public GamePanel(Function0<Unit> backCallback) {
         initComponents();
+        this.backCallback = backCallback;
     }
 
     /**
@@ -39,19 +55,91 @@ class GamePanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        canvasPanel = new PainterlyPanel(new GamePainter());
+        final javax.swing.JButton backButton = new javax.swing.JButton();
+
+        canvasPanel.setBackground(new java.awt.Color(255, 255, 255));
+        canvasPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        canvasPanel.setMinimumSize(new java.awt.Dimension(304, 304));
+        canvasPanel.setPreferredSize(new java.awt.Dimension(304, 304));
+
+        javax.swing.GroupLayout canvasPanelLayout = new javax.swing.GroupLayout(canvasPanel);
+        canvasPanel.setLayout(canvasPanelLayout);
+        canvasPanelLayout.setHorizontalGroup(
+            canvasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        canvasPanelLayout.setVerticalGroup(
+            canvasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
+
+        backButton.setText("Back");
+        backButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(canvasPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(backButton, javax.swing.GroupLayout.DEFAULT_SIZE, 304, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(canvasPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(backButton)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
+        backCallback.apply();
+    }//GEN-LAST:event_backButtonActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel canvasPanel;
     // End of variables declaration//GEN-END:variables
+
+    /**
+     * A panel that paints itself with a {@link Painter}.
+     */
+    static class PainterlyPanel extends JPanel {
+
+        /**
+         * The {@link Painter} used for painting.
+         */
+        private final Painter<? super JPanel> painter;
+
+        /**
+         * Creates a new {@link PainterlyPanel} with the specified Painter.
+         *
+         * @param painter
+         */
+        public PainterlyPanel(Painter<? super JPanel> painter) {
+            super();
+            this.painter = painter;
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            final Insets insets = getInsets();
+            int width = getWidth() - insets.right - insets.left;
+            int height = getHeight() - insets.bottom - insets.top;
+            painter.paint((Graphics2D) g.create(insets.left, insets.top, width, height),
+                    null, width, height);
+        }
+    }
 }
