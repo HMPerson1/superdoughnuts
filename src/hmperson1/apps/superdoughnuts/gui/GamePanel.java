@@ -16,6 +16,7 @@
  */
 package hmperson1.apps.superdoughnuts.gui;
 
+import hmperson1.apps.superdoughnuts.GameState;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
@@ -37,13 +38,20 @@ class GamePanel extends javax.swing.JPanel {
     private final Function0<Unit> backCallback;
 
     /**
+     * Called to retrieve GameStates
+     */
+    private final Function0<GameState> stateRetriever;
+
+    /**
      * Creates and populates a new {@link GamePanel}.
      *
      * @param backCallback called when back is pressed
+     * @param stateRetriever called to retrieve GameStates
      */
-    public GamePanel(Function0<Unit> backCallback) {
-        initComponents();
+    public GamePanel(Function0<Unit> backCallback, Function0<GameState> stateRetriever) {
         this.backCallback = backCallback;
+        this.stateRetriever = stateRetriever;
+        initComponents();
     }
 
     /**
@@ -55,7 +63,7 @@ class GamePanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        canvasPanel = new PainterlyPanel(new GamePainter());
+        canvasPanel = new PainterlyPanel(new GamePainter(stateRetriever));
         final javax.swing.JButton backButton = new javax.swing.JButton();
 
         canvasPanel.setBackground(new java.awt.Color(255, 255, 255));
@@ -140,6 +148,7 @@ class GamePanel extends javax.swing.JPanel {
             int height = getHeight() - insets.bottom - insets.top;
             painter.paint((Graphics2D) g.create(insets.left, insets.top, width, height),
                     null, width, height);
+            repaint();
         }
     }
 }

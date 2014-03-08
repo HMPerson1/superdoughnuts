@@ -47,9 +47,9 @@ class StartPanel extends javax.swing.JPanel {
      * @param exitCallback called when exit is pressed
      */
     public StartPanel(Function1<Map<String, String>, Unit> startCallback, Function0<Unit> exitCallback) {
-        initComponents();
         this.startCallback = startCallback;
         this.exitCallback = exitCallback;
+        initComponents();
     }
 
     /**

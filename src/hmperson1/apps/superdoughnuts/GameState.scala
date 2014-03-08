@@ -14,27 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package hmperson1.apps.superdoughnuts.gui;
+package hmperson1.apps.superdoughnuts
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import javax.swing.Painter;
+class GameState(val player: (Int, Int), val doughnuts: Set[(Int, Int, Int)])
 
-/**
- *
- * @author HMPerson1
- */
-class GamePainter implements Painter<Object> {
-
-    @Override
-    public void paint(Graphics2D g, Object object, int width, int height) {
-        g.setPaint(Color.CYAN);
-        g.fillRect(0, 0, width, height);
-        g.setPaint(Color.RED);
-        g.drawRect(0, 0, width - 1, height - 1);
-        g.setPaint(Color.BLACK);
-        g.drawChars("Hello!".toCharArray(), 0, 6, 0, g.getFontMetrics().getAscent());
-
-    }
-
+object GameState {
+  def apply(player: (Int, Int), doughnuts: Set[(Int, Int, Int)]): GameState =
+    new GameState(player, doughnuts)
 }

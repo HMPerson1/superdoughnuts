@@ -57,7 +57,7 @@
         </Property>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PainterlyPanel(new GamePainter())"/>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PainterlyPanel(new GamePainter(stateRetriever))"/>
         <AuxValue name="JavaCodeGenerator_SerializeTo" type="java.lang.String" value="GamePanel_canvasPanel"/>
       </AuxValues>
 

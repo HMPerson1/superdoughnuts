@@ -17,6 +17,7 @@
 package hmperson1.apps.superdoughnuts
 
 import hmperson1.apps.superdoughnuts.gui.GuiManager
+import hmperson1.apps.superdoughnuts.logic.GameManager
 import javax.swing.JPanel
 
 object SuperDoughnuts {
@@ -26,6 +27,7 @@ object SuperDoughnuts {
 
   var startPanel: JPanel = null
   var gamePanel: JPanel = null
+  var gameManager: GameManager = null
   /**
    * @param args the command line arguments
    */
@@ -36,10 +38,14 @@ object SuperDoughnuts {
           println("You pressed the start button! Good Job!")
           println("PlayerName: " + map(KEY_PLAYERNAME))
           println("Difficulty: " + map(KEY_DIFFICLUTY))
+          gameManager = GameManager create map(KEY_DIFFICLUTY).toInt
           GuiManager showPanel gamePanel
         },
-        () => { System.exit(0) })
-      gamePanel = GuiManager.createGamePanel(() => { GuiManager showPanel startPanel });
+        () => System.exit(0))
+
+      gamePanel = GuiManager.createGamePanel(
+        () => GuiManager showPanel startPanel,
+        () => gameManager.state)
 
       GuiManager renameFrame "Doughnuts"
       GuiManager showPanel startPanel

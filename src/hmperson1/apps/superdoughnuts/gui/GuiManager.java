@@ -16,6 +16,7 @@
  */
 package hmperson1.apps.superdoughnuts.gui;
 
+import hmperson1.apps.superdoughnuts.GameState;
 import java.lang.reflect.InvocationTargetException;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -83,10 +84,11 @@ public class GuiManager {
      * Creates a {@link GamePanel}.
      *
      * @param backCallback called when back is pressed
+     * @param stateRetriever called to retrieve GameStates
      * @return a new GamePanel with the given functions
      */
-    public static JPanel createGamePanel(Function0<Unit> backCallback) {
-        return new GamePanel(backCallback);
+    public static JPanel createGamePanel(Function0<Unit> backCallback, Function0<GameState> stateRetriever) {
+        return new GamePanel(backCallback, stateRetriever);
     }
 
     /**
