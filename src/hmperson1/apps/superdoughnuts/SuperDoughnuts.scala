@@ -44,7 +44,10 @@ object SuperDoughnuts {
         () => System.exit(0))
 
       gamePanel = GuiManager.createGamePanel(
-        () => GuiManager showPanel startPanel,
+        () => {
+          GuiManager showPanel startPanel
+          gameManager.stop()
+        },
         () => gameManager.state)
 
       GuiManager renameFrame "Doughnuts"

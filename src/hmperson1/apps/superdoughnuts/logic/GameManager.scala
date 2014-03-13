@@ -17,6 +17,7 @@
 package hmperson1.apps.superdoughnuts.logic
 
 import java.awt.Point
+import java.util.concurrent.{ ScheduledThreadPoolExecutor, TimeUnit, ScheduledFuture }
 import scala.collection.mutable
 import scala.util.Random
 import hmperson1.apps.superdoughnuts.GameState
@@ -24,14 +25,25 @@ import hmperson1.apps.superdoughnuts.GameState
 class GameManager(doughnutLife: Int, dpt: Double) {
   import GameManager._
 
-  final val doughnuts = mutable.Set[Doughnut]()
-  final val player = new Point
-  final val rand = new Random
+  private val doughnuts = mutable.Set[Doughnut]()
+  private val player = new Point
+  private val rand = new Random
 
-  var doughnutsEaten = 0
-  var toGen = 0.0
+  private var doughnutsEaten = 0
+  private var toGen = 0.0
+
+  private var lastTick = 0L
 
   def tick(): Unit = {
+    var now = System.nanoTime
+    val diff = now - lastTick
+    if (diff > 51000000) {
+      println("LAAAG!!!!@" + System.currentTimeMillis)
+      println(diff)
+      println()
+    }
+    lastTick = now
+
     for (d <- doughnuts) {
       if (player.x == d.x && player.y == d.y) {
         doughnutsEaten += 1
@@ -41,6 +53,7 @@ class GameManager(doughnutLife: Int, dpt: Double) {
         if (d.life <= 0) doughnuts -= d
       }
     }
+
     toGen += dpt
     while (toGen > 0) {
       doughnuts += new Doughnut(rand nextInt GRID_SIZE_X, rand nextInt GRID_SIZE_Y)
@@ -50,9 +63,11 @@ class GameManager(doughnutLife: Int, dpt: Double) {
 
   private def doughnutVal() = rand.nextGaussian / 3 + 1
 
-  def state = GameState((player.x, player.y), doughnuts.map(_.asTuple).toSet)
+  def stop() = GameManager.stop(this)
 
-  class Doughnut(val x: Int, val y: Int) {
+  def state = GameState((player.x, player.y), doughnuts.map(_.asTuple).toSet, doughnutLife, (GRID_SIZE_X, GRID_SIZE_Y))
+
+  private class Doughnut(val x: Int, val y: Int) {
     var life = doughnutLife
     def asTuple = (x, y, life)
   }
@@ -68,8 +83,20 @@ object GameManager {
   val DOUGHNUT_LIFE = Array(9, 7, 5, 3).map(_ * TICKS_PER_SECOND)
   val DPT = Array(60, 30, 20, 10).map(_ * SECONDS_PER_TICK / 60.0)
 
+  private val timer = new ScheduledThreadPoolExecutor(1)
+  private val startedGMs = mutable.Map[GameManager, ScheduledFuture[_ <: Any]]()
+
   def create(difficulty: Int): GameManager = {
     val gm = new GameManager(DOUGHNUT_LIFE(difficulty), DPT(0))
+    val future = timer.scheduleAtFixedRate(gm, 0, 50, TimeUnit.MILLISECONDS)
+    startedGMs(gm) = future
     gm
   }
+
+  private def stop(gm: GameManager): Unit = {
+    startedGMs(gm).cancel(false)
+    startedGMs -= gm
+  }
+
+  private implicit def runGameManager(x: GameManager): Runnable = new Runnable() { def run() = x.tick() }
 }

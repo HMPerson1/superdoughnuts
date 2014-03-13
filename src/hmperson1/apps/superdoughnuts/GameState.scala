@@ -16,9 +16,9 @@
  */
 package hmperson1.apps.superdoughnuts
 
-class GameState(val player: (Int, Int), val doughnuts: Set[(Int, Int, Int)])
+class GameState(val player: (Int, Int), val doughnuts: Set[(Int, Int, Int)], val maxLife: Int, val gridSize: (Int, Int))
 
 object GameState {
-  def apply(player: (Int, Int), doughnuts: Set[(Int, Int, Int)]): GameState =
-    new GameState(player, doughnuts)
+  def apply(player: (Int, Int), doughnuts: Set[(Int, Int, Int)], maxLife: Int, gridSize: (Int, Int)): GameState =
+    new GameState(player, doughnuts, maxLife, gridSize)
 }

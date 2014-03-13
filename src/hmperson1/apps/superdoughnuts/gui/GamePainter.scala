@@ -29,8 +29,17 @@ class GamePainter(stateRetriever: () => GameState) extends Painter[Any] {
     g.drawRect(0, 0, width - 1, height - 1)
     g setPaint Color.BLACK
 
-    g.drawString("Hello!", 0, g.getFontMetrics.getAscent)
-    g.drawString("Player: " + state.player, 0, g.getFontMetrics.getHeight + g.getFontMetrics.getAscent)
-    g.drawString("Doughs: " + state.doughnuts.mkString, 0, 2 * g.getFontMetrics.getHeight + g.getFontMetrics.getAscent)
+    val xScale = width.toDouble / state.gridSize._1
+    val yScale = height.toDouble / state.gridSize._2
+
+    for (d <- state.doughnuts) {
+      var (x, y, life) = d
+      g.setPaint(new Color(255, 165, 0, 255 * life / state.maxLife))
+      g.fillOval((x * xScale).toInt, (y * yScale).toInt, xScale.toInt, yScale.toInt)
+    }
+
+    val (px, py) = state.player
+    g.setPaint(new Color(0, 0, 0, 191))
+    g.fillOval((px * xScale).toInt, (py * yScale).toInt, (xScale * .75).toInt, (yScale * .75).toInt)
   }
 }
