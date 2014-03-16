@@ -25,6 +25,8 @@ object SuperDoughnuts {
   final val KEY_PLAYERNAME = "playerName"
   final val KEY_DIFFICLUTY = "difficluty"
 
+  val delegate = new KeyListenerDelegate(null)
+  
   var startPanel: JPanel = null
   var gamePanel: JPanel = null
   var gameManager: GameManager = null
@@ -39,6 +41,7 @@ object SuperDoughnuts {
           println("PlayerName: " + map(KEY_PLAYERNAME))
           println("Difficulty: " + map(KEY_DIFFICLUTY))
           gameManager = GameManager create map(KEY_DIFFICLUTY).toInt
+          delegate.delegatee = gameManager.keyListener
           GuiManager showPanel gamePanel
         },
         () => System.exit(0))
@@ -48,7 +51,7 @@ object SuperDoughnuts {
           GuiManager showPanel startPanel
           gameManager.stop()
         },
-        () => gameManager.state)
+        () => gameManager.state, delegate)
 
       GuiManager renameFrame "Doughnuts"
       GuiManager showPanel startPanel

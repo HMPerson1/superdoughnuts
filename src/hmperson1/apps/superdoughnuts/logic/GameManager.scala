@@ -17,6 +17,7 @@
 package hmperson1.apps.superdoughnuts.logic
 
 import java.awt.Point
+import java.awt.event.{ KeyAdapter, KeyEvent }
 import java.util.concurrent.{ ScheduledThreadPoolExecutor, TimeUnit, ScheduledFuture }
 import scala.collection.mutable
 import scala.util.Random
@@ -28,6 +29,20 @@ class GameManager(doughnutLife: Int, dpt: Double) {
   private val doughnuts = mutable.Set[Doughnut]()
   private val player = new Point
   private val rand = new Random
+
+  val keyListener = new KeyAdapter() {
+    override def keyPressed(e: KeyEvent): Unit = e.getKeyCode match {
+      case KeyEvent.VK_LEFT =>
+        if (player.x > 0) player.x -= 1
+      case KeyEvent.VK_RIGHT =>
+        if (player.x < GRID_SIZE_X - 1) player.x += 1
+      case KeyEvent.VK_UP =>
+        if (player.y > 0) player.y -= 1
+      case KeyEvent.VK_DOWN =>
+        if (player.y < GRID_SIZE_Y - 1) player.y += 1
+      case _ =>
+    }
+  }
 
   private var doughnutsEaten = 0
   private var toGen = 0.0

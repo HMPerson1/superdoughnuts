@@ -20,6 +20,7 @@ import hmperson1.apps.superdoughnuts.GameState;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.awt.event.KeyListener;
 import javax.swing.JPanel;
 import javax.swing.Painter;
 import scala.Function0;
@@ -43,14 +44,21 @@ class GamePanel extends javax.swing.JPanel {
     private final Function0<GameState> stateRetriever;
 
     /**
+     * Receives all {@link java.awt.event.KeyEvent}s from this panel
+     */
+    private final KeyListener gameListener;
+
+    /**
      * Creates and populates a new {@link GamePanel}.
      *
      * @param backCallback called when back is pressed
      * @param stateRetriever called to retrieve GameStates
+     * @param gameListener receives all {@link java.awt.event.KeyEvent}s from this panel
      */
-    public GamePanel(Function0<Unit> backCallback, Function0<GameState> stateRetriever) {
+    public GamePanel(Function0<Unit> backCallback, Function0<GameState> stateRetriever, KeyListener gameListener) {
         this.backCallback = backCallback;
         this.stateRetriever = stateRetriever;
+        this.gameListener = gameListener;
         initComponents();
     }
 
@@ -63,13 +71,20 @@ class GamePanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        canvasPanel = new PainterlyPanel(new GamePainter(stateRetriever));
+        final javax.swing.JPanel canvasPanel = new PainterlyPanel(new GamePainter(stateRetriever));
         final javax.swing.JButton backButton = new javax.swing.JButton();
+
+        addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                formFocusGained(evt);
+            }
+        });
 
         canvasPanel.setBackground(new java.awt.Color(255, 255, 255));
         canvasPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         canvasPanel.setMinimumSize(new java.awt.Dimension(304, 304));
         canvasPanel.setPreferredSize(new java.awt.Dimension(304, 304));
+        canvasPanel.addKeyListener(gameListener);
 
         javax.swing.GroupLayout canvasPanelLayout = new javax.swing.GroupLayout(canvasPanel);
         canvasPanel.setLayout(canvasPanelLayout);
@@ -115,11 +130,15 @@ class GamePanel extends javax.swing.JPanel {
         backCallback.apply();
     }//GEN-LAST:event_backButtonActionPerformed
 
+    private void formFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_formFocusGained
+        synchronized (getTreeLock()) {
+            getComponent(0).requestFocusInWindow();
+        }
+    }//GEN-LAST:event_formFocusGained
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel canvasPanel;
     // End of variables declaration//GEN-END:variables
-
     /**
      * A panel that paints itself with a {@link Painter}.
      */
@@ -137,6 +156,7 @@ class GamePanel extends javax.swing.JPanel {
          */
         public PainterlyPanel(Painter<? super JPanel> painter) {
             super();
+            setFocusable(true);
             this.painter = painter;
         }
 
