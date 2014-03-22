@@ -90,7 +90,7 @@ class GameManager(doughnutLife: Int, dpt: Double) {
   def stop() = GameManager.stop(this)
 
   def state = synchronized {
-    GameState((player.x, player.y), doughnuts.map(_.asTuple).toSet, doughnutLife, (GRID_SIZE_X, GRID_SIZE_Y))
+    GameState((player.x, player.y), doughnuts.map(_.asTuple).toSet, doughnutLife, (GRID_SIZE_X, GRID_SIZE_Y), doughnutsEaten)
   }
 
   private class Doughnut(val x: Int, val y: Int) {

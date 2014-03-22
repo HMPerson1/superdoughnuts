@@ -26,6 +26,8 @@ class GamePainter(stateRetriever: () => GameState) extends Painter[Any] {
     val state = stateRetriever();
     g.setPaint(Color.WHITE)
     g.fillRect(0, 0, width, height)
+    g.setPaint(Color.BLACK)
+    g.drawString("Score: " + state.score.toString, 0, g.getFontMetrics.getAscent)
 
     val xScale = width.toDouble / state.gridSize._1
     val yScale = height.toDouble / state.gridSize._2
