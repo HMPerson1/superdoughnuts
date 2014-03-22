@@ -28,19 +28,18 @@ class GameManager(doughnutLife: Int, dpt: Double) {
 
   private val doughnuts = mutable.Set[Doughnut]()
   private val player = new Point
+  private val motion = new Point
   private val rand = new Random
 
   val keyListener = new KeyAdapter() {
-    override def keyPressed(e: KeyEvent): Unit = e.getKeyCode match {
-      case KeyEvent.VK_LEFT =>
-        if (player.x > 0) player.x -= 1
-      case KeyEvent.VK_RIGHT =>
-        if (player.x < GRID_SIZE_X - 1) player.x += 1
-      case KeyEvent.VK_UP =>
-        if (player.y > 0) player.y -= 1
-      case KeyEvent.VK_DOWN =>
-        if (player.y < GRID_SIZE_Y - 1) player.y += 1
-      case _ =>
+    override def keyPressed(e: KeyEvent): Unit = GameManager.this.synchronized {
+      e.getKeyCode match {
+        case KeyEvent.VK_LEFT  => motion.x = -1
+        case KeyEvent.VK_RIGHT => motion.x = 1
+        case KeyEvent.VK_UP    => motion.y = -1
+        case KeyEvent.VK_DOWN  => motion.y = 1
+        case _                 =>
+      }
     }
   }
 
@@ -48,16 +47,26 @@ class GameManager(doughnutLife: Int, dpt: Double) {
   private var toGen = 0.0
 
   private var lastTick = 0L
+  private var cumultLag = 0L
+  private var isFirstTick = true
 
-  def tick(): Unit = {
-    var now = System.nanoTime
-    val diff = now - lastTick
-    if (diff > 51000000) {
-      println("LAAAG!!!!@" + System.currentTimeMillis)
-      println(diff)
-      println()
+  def tick(): Unit = synchronized {
+    val now = System.nanoTime
+    cumultLag += now - lastTick - 50000000
+    if (isFirstTick) { cumultLag = 0; isFirstTick = false }
+    if (cumultLag >= 50000000) {
+      cumultLag -= 50000000
+      println(">>>>> SKIPPED A TICK <<<<<")
     }
     lastTick = now
+
+    player.translate(motion.x, motion.y)
+    motion.setLocation(0, 0)
+
+    if (player.x < 0) player.x = 0
+    if (player.x > GRID_SIZE_X - 1) player.x = GRID_SIZE_X - 1
+    if (player.y < 0) player.y = 0
+    if (player.y > GRID_SIZE_Y - 1) player.y = GRID_SIZE_Y - 1
 
     for (d <- doughnuts) {
       if (player.x == d.x && player.y == d.y) {
@@ -80,7 +89,9 @@ class GameManager(doughnutLife: Int, dpt: Double) {
 
   def stop() = GameManager.stop(this)
 
-  def state = GameState((player.x, player.y), doughnuts.map(_.asTuple).toSet, doughnutLife, (GRID_SIZE_X, GRID_SIZE_Y))
+  def state = synchronized {
+    GameState((player.x, player.y), doughnuts.map(_.asTuple).toSet, doughnutLife, (GRID_SIZE_X, GRID_SIZE_Y))
+  }
 
   private class Doughnut(val x: Int, val y: Int) {
     var life = doughnutLife

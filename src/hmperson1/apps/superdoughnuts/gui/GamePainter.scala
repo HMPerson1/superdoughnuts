@@ -18,28 +18,32 @@ package hmperson1.apps.superdoughnuts.gui
 
 import hmperson1.apps.superdoughnuts.GameState
 import java.awt.Color
+import java.awt.Graphics2D
 import javax.swing.Painter
 
 class GamePainter(stateRetriever: () => GameState) extends Painter[Any] {
-  def paint(g: java.awt.Graphics2D, ignored: Any, width: Int, height: Int): Unit = {
+  def paint(g: Graphics2D, ignored: Any, width: Int, height: Int): Unit = {
     val state = stateRetriever();
-    g setPaint Color.CYAN
+    g.setPaint(Color.WHITE)
     g.fillRect(0, 0, width, height)
-    g setPaint Color.RED
-    g.drawRect(0, 0, width - 1, height - 1)
-    g setPaint Color.BLACK
 
     val xScale = width.toDouble / state.gridSize._1
     val yScale = height.toDouble / state.gridSize._2
 
     for (d <- state.doughnuts) {
-      var (x, y, life) = d
+      val (x, y, life) = d
       g.setPaint(new Color(255, 165, 0, 255 * life / state.maxLife))
-      g.fillOval((x * xScale).toInt, (y * yScale).toInt, xScale.toInt, yScale.toInt)
+      fillCircle(g, x, y, 0.45, xScale, yScale)
     }
 
     val (px, py) = state.player
     g.setPaint(new Color(0, 0, 0, 191))
-    g.fillOval((px * xScale).toInt, (py * yScale).toInt, (xScale * .75).toInt, (yScale * .75).toInt)
+    fillCircle(g, px, py, 0.3, xScale, yScale)
+  }
+
+  private def fillCircle(g: Graphics2D, x: Double, y: Double, r: Double, xScale: Double, yScale: Double) {
+    val dc = 0.5 - r
+    val r2 = r + r
+    g.fillOval(((x + dc) * xScale).toInt, ((y + dc) * yScale).toInt, (r2 * xScale).toInt, (r2 * yScale).toInt)
   }
 }

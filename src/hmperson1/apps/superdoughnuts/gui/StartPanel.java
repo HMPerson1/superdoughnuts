@@ -17,9 +17,9 @@
 package hmperson1.apps.superdoughnuts.gui;
 
 import hmperson1.apps.superdoughnuts.SuperDoughnuts;
-import scala.Unit;
 import scala.Function0;
 import scala.Function1;
+import scala.Unit;
 import scala.collection.immutable.HashMap;
 import scala.collection.immutable.Map;
 
@@ -46,7 +46,7 @@ class StartPanel extends javax.swing.JPanel {
      * @param startCallback called when start is pressed
      * @param exitCallback called when exit is pressed
      */
-    public StartPanel(Function1<Map<String, String>, Unit> startCallback, Function0<Unit> exitCallback) {
+    StartPanel(Function1<Map<String, String>, Unit> startCallback, Function0<Unit> exitCallback) {
         this.startCallback = startCallback;
         this.exitCallback = exitCallback;
         initComponents();

@@ -86,7 +86,8 @@ public class GuiManager {
      *
      * @param backCallback called when back is pressed
      * @param stateRetriever called to retrieve GameStates
-     * @param gameListener receives all {@link java.awt.event.KeyEvent}s from this panel
+     * @param gameListener receives all {@link java.awt.event.KeyEvent}s from
+     * this panel
      * @return a new GamePanel with the given functions
      */
     public static JPanel createGamePanel(Function0<Unit> backCallback, Function0<GameState> stateRetriever, KeyListener gameListener) {
@@ -123,7 +124,7 @@ public class GuiManager {
         } else {
             frameIniter.run();
         }
-        mainFrame = frameIniter.getFrame();
+        mainFrame = frameIniter.frame;
     }
 
     /**
@@ -142,7 +143,7 @@ public class GuiManager {
         /**
          * The frame that will be created upon execution.
          */
-        private JFrame frame;
+        JFrame frame;
 
         @Override
         public void run() {
@@ -153,15 +154,6 @@ public class GuiManager {
             }
             frame = new JFrame();
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        }
-
-        /**
-         * Retrieves the frame created in {@link run()}.
-         *
-         * @return the frame created
-         */
-        public JFrame getFrame() {
-            return frame;
         }
     }
 
@@ -180,7 +172,7 @@ public class GuiManager {
          *
          * @param func the function to be wrapped
          */
-        public Func2Runnable(Function0<Unit> func) {
+        Func2Runnable(Function0<Unit> func) {
             this.func = func;
         }
 

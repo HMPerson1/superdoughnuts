@@ -26,7 +26,7 @@ object SuperDoughnuts {
   final val KEY_DIFFICLUTY = "difficluty"
 
   val delegate = new KeyListenerDelegate(null)
-  
+
   var startPanel: JPanel = null
   var gamePanel: JPanel = null
   var gameManager: GameManager = null

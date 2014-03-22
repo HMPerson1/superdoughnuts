@@ -53,9 +53,10 @@ class GamePanel extends javax.swing.JPanel {
      *
      * @param backCallback called when back is pressed
      * @param stateRetriever called to retrieve GameStates
-     * @param gameListener receives all {@link java.awt.event.KeyEvent}s from this panel
+     * @param gameListener receives all {@link java.awt.event.KeyEvent}s from
+     * this panel
      */
-    public GamePanel(Function0<Unit> backCallback, Function0<GameState> stateRetriever, KeyListener gameListener) {
+    GamePanel(Function0<Unit> backCallback, Function0<GameState> stateRetriever, KeyListener gameListener) {
         this.backCallback = backCallback;
         this.stateRetriever = stateRetriever;
         this.gameListener = gameListener;
@@ -142,7 +143,7 @@ class GamePanel extends javax.swing.JPanel {
     /**
      * A panel that paints itself with a {@link Painter}.
      */
-    static class PainterlyPanel extends JPanel {
+    private static class PainterlyPanel extends JPanel {
 
         /**
          * The {@link Painter} used for painting.
@@ -154,7 +155,7 @@ class GamePanel extends javax.swing.JPanel {
          *
          * @param painter
          */
-        public PainterlyPanel(Painter<? super JPanel> painter) {
+        PainterlyPanel(Painter<? super JPanel> painter) {
             super();
             setFocusable(true);
             this.painter = painter;
