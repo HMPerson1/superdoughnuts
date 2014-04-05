@@ -37,9 +37,6 @@ object SuperDoughnuts {
     GuiManager.doOnEdt(() => {
       startPanel = GuiManager.createStartPanel(
         (map: Map[String, String]) => {
-          println("You pressed the start button! Good Job!")
-          println("PlayerName: " + map(KEY_PLAYERNAME))
-          println("Difficulty: " + map(KEY_DIFFICLUTY))
           gameManager = GameManager create map(KEY_DIFFICLUTY).toInt
           delegate.delegatee = gameManager.keyListener
           GuiManager showPanel gamePanel

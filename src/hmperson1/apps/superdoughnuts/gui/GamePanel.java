@@ -17,6 +17,7 @@
 package hmperson1.apps.superdoughnuts.gui;
 
 import hmperson1.apps.superdoughnuts.GameState;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
@@ -81,22 +82,10 @@ class GamePanel extends javax.swing.JPanel {
             }
         });
 
-        canvasPanel.setBackground(new java.awt.Color(255, 255, 255));
         canvasPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         canvasPanel.setMinimumSize(new java.awt.Dimension(304, 304));
         canvasPanel.setPreferredSize(new java.awt.Dimension(304, 304));
         canvasPanel.addKeyListener(gameListener);
-
-        javax.swing.GroupLayout canvasPanelLayout = new javax.swing.GroupLayout(canvasPanel);
-        canvasPanel.setLayout(canvasPanelLayout);
-        canvasPanelLayout.setHorizontalGroup(
-            canvasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        canvasPanelLayout.setVerticalGroup(
-            canvasPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
 
         backButton.setText("Back");
         backButton.addActionListener(new java.awt.event.ActionListener() {
@@ -113,12 +102,12 @@ class GamePanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(canvasPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(backButton, javax.swing.GroupLayout.DEFAULT_SIZE, 304, Short.MAX_VALUE))
+                    .addComponent(backButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(canvasPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -165,11 +154,21 @@ class GamePanel extends javax.swing.JPanel {
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
             final Insets insets = getInsets();
-            int width = getWidth() - insets.right - insets.left;
-            int height = getHeight() - insets.bottom - insets.top;
-            painter.paint((Graphics2D) g.create(insets.left, insets.top, width, height),
+            int s = Math.min(getWidth(), getHeight());
+            int width = s - insets.right - insets.left;
+            int height = s - insets.bottom - insets.top;
+            painter.paint((Graphics2D) g.create(insets.left + ((getWidth() - s) / 2), insets.top, width, height),
                     null, width, height);
             repaint();
+        }
+
+        @Override
+        public void paintBorder(Graphics g) {
+            int s = Math.min(getWidth(), getHeight());
+            Dimension actualSize = getSize();
+            setSize(s, s);
+            super.paintBorder(g.create((actualSize.width - s) / 2, 0, s, s));
+            setSize(actualSize);
         }
     }
 }

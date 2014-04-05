@@ -26,22 +26,30 @@ class GamePainter(stateRetriever: () => GameState) extends Painter[Any] {
     val state = stateRetriever();
     g.setPaint(Color.WHITE)
     g.fillRect(0, 0, width, height)
-    g.setPaint(Color.BLACK)
-    g.drawString("Score: " + state.score.toString, 0, g.getFontMetrics.getAscent)
+
+    val scoreString = state.score.toString
+    g.setPaint(scorePaint)
+    g.setFont(g.getFont.deriveFont(height.toFloat / 2))
+    val sBounds = g.getFontMetrics.getStringBounds(scoreString, g)
+    g.drawString(scoreString, (width / 2) - (sBounds.getWidth / 2).toInt, (height / 2) - ((sBounds.getHeight / 2) + sBounds.getY).toInt)
 
     val xScale = width.toDouble / state.gridSize._1
     val yScale = height.toDouble / state.gridSize._2
 
     for (d <- state.doughnuts) {
       val (x, y, life) = d
-      g.setPaint(new Color(255, 165, 0, 255 * life / state.maxLife))
+      g.setPaint(new Color(doughPaint.getRed, doughPaint.getGreen, doughPaint.getBlue, doughPaint.getAlpha * life / state.maxLife))
       fillCircle(g, x, y, 0.45, xScale, yScale)
     }
 
     val (px, py) = state.player
-    g.setPaint(new Color(0, 0, 0, 191))
+    g.setPaint(playerPaint)
     fillCircle(g, px, py, 0.3, xScale, yScale)
   }
+
+  private val scorePaint = new Color(127, 127, 255, 127)
+  private val playerPaint = new Color(0, 0, 0, 191)
+  private val doughPaint = new Color(255, 165, 0, 255)
 
   private def fillCircle(g: Graphics2D, x: Double, y: Double, r: Double, xScale: Double, yScale: Double) {
     val dc = 0.5 - r
